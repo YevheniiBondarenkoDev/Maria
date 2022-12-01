@@ -1,4 +1,17 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src"
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "dtoFileNameSuffix": [".dto.ts", "param.ts", ".params.ts"],
+          "introspectComments": true
+        }
+      }
+    ],
+    "assets": ["pdf-download/templates/*"],
+    "watchAssets": true
+  }
 }
