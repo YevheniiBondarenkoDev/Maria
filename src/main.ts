@@ -32,6 +32,6 @@ async function bootstrap() {
       forbidNonWhitelisted: false,
     }),
   );
-  await app.listen(3000);
+  await app.listen(8000);
 }
 bootstrap().then(() => console.log('Server started successful.'));
