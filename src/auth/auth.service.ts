@@ -69,21 +69,21 @@ export class AuthService {
     }
     const hashedPassword = this.cryptoService.hashPassword(password);
     const sessionToken = this.cryptoService.generateSessionToken();
-    const { _id: userId } = await this.usersService.create({
+    const { _id: userId, role } = await this.usersService.create({
       password: hashedPassword,
       email,
       sessionToken,
       role: 'user',
     });
     const accessToken = this.jwtService.sign(
-      { userId, sessionToken },
+      { userId: userId.toHexString(), sessionToken },
       this.JWTConfig,
     );
     return {
       accessToken,
       user: {
-        role: user.role,
-        _id: user._id.toHexString(),
+        role,
+        _id: userId.toHexString(),
       },
     };
   }

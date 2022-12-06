@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class CryptoService {
-  saltRound: 10;
+  saltRound = 10;
   comparePasswords(password: string, encryptedPassword: string) {
     return bcrypt.compareSync(password, encryptedPassword);
   }

@@ -15,8 +15,8 @@ export class AuthController {
   login(@Body() loginDto: LoginDto): Promise<SuccessfulAuth> {
     return this.authService.login(loginDto);
   }
-  @Get('registration')
-  registration(@Body() loginDto: LoginDto): Promise<SuccessfulAuth> {
+  @Post('registration')
+  registration(@Body() loginDto): Promise<SuccessfulAuth> {
     return this.authService.register(loginDto);
   }
   @Auth()
