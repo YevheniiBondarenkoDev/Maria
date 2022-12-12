@@ -6,7 +6,7 @@
       {
         "name": "@nestjs/swagger",
         "options": {
-          "dtoFileNameSuffix": [".dto.ts", "param.ts", ".params.ts"],
+          "dtoFileNameSuffix": [".dto.ts", "param.ts", ".params.ts", ".query.ts"],
           "introspectComments": true
         }
       }
