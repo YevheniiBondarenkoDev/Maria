@@ -99,7 +99,7 @@ export class ProductsController {
       .skip(skip)
       .limit(quantityPerPage);
     if (sortBy) {
-      findQuery.sort({ [sortBy]: -1 });
+      findQuery.sort({ [sortBy]: 1 });
     }
     return findQuery.exec();
   }

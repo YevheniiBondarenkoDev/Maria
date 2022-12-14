@@ -72,4 +72,7 @@ export class OrdersService {
     }, 0);
     return { ...order, totalPrice };
   }
+  getById(orderId) {
+    return this.orderModel.findById(orderId);
+  }
 }
