@@ -17,7 +17,9 @@ import { IdParam } from '../dto/id.param';
 import { GetListQuery } from './dto/get-list.query';
 import { FilterQuery } from 'mongoose';
 import { Product } from './product.schema';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -72,7 +74,7 @@ export class ProductsController {
     const filterQuery: FilterQuery<Product> = {
       $and: [
         {
-          ...(types ? { type: { $in: types } } : null),
+          ...(types?.length ? { type: { $in: types } } : null),
           ...(isOnlyAvailable ? { stockAmount: { $gt: 0 } } : null),
           ...(maxPrice || minPrice
             ? {
@@ -103,9 +105,9 @@ export class ProductsController {
     }
     return findQuery.exec();
   }
-  @Get('types')
-  getExistTypes() {
-    return this.productsService.getExistTypes();
+  @Get('helpers')
+  getFilterHelpers() {
+    return this.productsService.getFilterHelpers();
   }
   @Get(':id')
   getById(@Param() { id }: IdParam) {

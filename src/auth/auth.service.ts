@@ -7,7 +7,6 @@ import { UsersService } from '../users/users.service';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { CryptoService } from '../crypto/crypto.service';
-import { ChangePasswordDto } from './dto/change-password.dto';
 import { SuccessfulAuth } from './helpers/types';
 
 @Injectable()
@@ -61,7 +60,7 @@ export class AuthService {
   async register({ email, password }: LoginDto): Promise<SuccessfulAuth> {
     const user = await this.usersService.findOne({ email });
     if (user) {
-      throw new UnauthorizedException('This email is already taken');
+      throw new BadRequestException('This email is already taken');
     }
     const hashedPassword = this.cryptoService.hashPassword(password);
     const sessionToken = this.cryptoService.generateSessionToken();
@@ -88,36 +87,5 @@ export class AuthService {
       { _id: userId },
       { $set: { sessionToken: null } },
     );
-  }
-
-  async changePassword(
-    { oldPassword, updatedPassword }: ChangePasswordDto,
-    userId: string,
-  ): Promise<SuccessfulAuth> {
-    const user = await this.usersService.findById(userId);
-    const isIdentical = this.cryptoService.comparePasswords(
-      oldPassword,
-      user.password,
-    );
-    if (!isIdentical) {
-      throw new BadRequestException('Incorrect password');
-    }
-    const hashedPassword = this.cryptoService.hashPassword(updatedPassword);
-    const sessionToken = this.cryptoService.generateSessionToken();
-    await this.usersService.updateOne(
-      { _id: userId },
-      { $set: { sessionToken, password: hashedPassword } },
-    );
-    const accessToken = this.jwtService.sign(
-      { userId, sessionToken },
-      this.JWTConfig,
-    );
-    return {
-      accessToken,
-      user: {
-        role: user.role,
-        _id: user._id.toHexString(),
-      },
-    };
   }
 }

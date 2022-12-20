@@ -47,7 +47,19 @@ export class ProductsService {
   deleteById(productId: string | Types.ObjectId) {
     return this.productModel.findByIdAndDelete(productId);
   }
-  getExistTypes() {
-    return this.productModel.distinct<string>('type').exec();
+  async getFilterHelpers() {
+    const [filterHelpers] = await this.productModel
+      .aggregate<string>([
+        {
+          $group: {
+            _id: null,
+            maxPrice: { $max: '$price' },
+            minPrice: { $min: '$price' },
+            types: { $addToSet: '$type' },
+          },
+        },
+      ])
+      .exec();
+    return filterHelpers;
   }
 }

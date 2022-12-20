@@ -14,7 +14,9 @@ import { VerifiedToken } from '../auth/helpers/types';
 import { User } from '../users/user.schema';
 import { LeanDocument } from 'mongoose';
 import { IdParam } from '../dto/id.param';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Orders')
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
@@ -32,7 +34,7 @@ export class OrdersController {
       return acc;
     }, {});
     const order = await this.ordersService.createOrder(items, userId);
-    return this.ordersService.mapOrder(order);
+    return this.ordersService.mapOrder(order.toJSON());
   }
   @Auth('admin')
   @Get()
@@ -43,13 +45,8 @@ export class OrdersController {
         path: 'userId',
         model: 'User',
         select: { email: true },
-      });
-    return orders.map(this.ordersService.mapOrder);
-  }
-  @Auth('user')
-  @Get()
-  async getMyOrders(@ExtractUser() { userId }: VerifiedToken) {
-    const orders = await this.ordersService.findMany({ userId });
+      })
+      .lean();
     return orders.map(this.ordersService.mapOrder);
   }
   @Auth('admin')
@@ -61,7 +58,8 @@ export class OrdersController {
         path: 'userId',
         model: 'User',
         select: { email: true },
-      });
+      })
+      .lean();
     return this.ordersService.mapOrder(order);
   }
 }

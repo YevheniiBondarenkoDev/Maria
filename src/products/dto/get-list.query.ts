@@ -1,5 +1,4 @@
 import {
-  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsIn,
@@ -23,7 +22,6 @@ export class GetListQuery {
   quantityPerPage = 10;
   @IsOptional()
   @IsArray()
-  @ArrayMinSize(1)
   @IsString({ each: true })
   types?: string[];
   @ApiPropertyOptional({ enum: SortProductFieldsEnum })
