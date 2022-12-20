@@ -12,10 +12,12 @@ import { SortProductFields } from '../helpers/types';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GetListQuery {
+  @ApiPropertyOptional({ type: 'number', minimum: 1 })
   @IsInt()
   @IsPositive()
   @IsOptional()
   page = 1;
+  @ApiPropertyOptional({ type: 'number', minimum: 1 })
   @IsInt()
   @IsPositive()
   @IsOptional()
